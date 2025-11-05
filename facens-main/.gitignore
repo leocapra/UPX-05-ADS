@@ -1,0 +1,10 @@
+back-end/node_modules
+front-end/node_modules
+/.env
+/.vscode
+.DS_Store
+/build
+/logs
+*.log
+/coverage
+/.idea

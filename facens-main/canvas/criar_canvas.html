@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Canvas do Modelo de Negócios</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f4f8;
+        }
+        .canvas-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+            grid-template-rows: 1fr 1fr auto;
+            gap: 0.5rem;
+            min-height: 50vh;
+        }
+        .canvas-section {
+            background-color: #fff;
+            border-radius: 0.5rem;
+            border: 2px solid #3b82f6;
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            overflow-y: auto;
+        }
+        .canvas-section h3 {
+            font-weight: 700;
+            color: #1e40af;
+            font-size: 1rem;
+            margin-top: 0;
+            margin-bottom: 0.25rem;
+        }
+        .canvas-content {
+            white-space: pre-wrap;
+            word-break: break-word;
+            flex-grow: 1;
+        }
+        .grid-partners { grid-area: 1 / 1 / span 2 / 2; }
+        .grid-activities { grid-area: 1 / 2 / 2 / 3; }
+        .grid-resources { grid-area: 2 / 2 / 3 / 3; }
+        .grid-value-propositions { grid-area: 1 / 3 / span 2 / 5; }
+        .grid-customer-relationships { grid-area: 1 / 5 / 2 / 6; }
+        .grid-channels { grid-area: 2 / 5 / 3 / 6; }
+        .grid-customer-segments { grid-area: 1 / 6 / span 2 / 7; }
+        .grid-cost-structure { grid-area: 3 / 1 / 4 / 4; }
+        .grid-revenue-streams { grid-area: 3 / 4 / 4 / 7; }
+
+        .pdf-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            margin-bottom: 1rem;
+        }
+
+        /* Estilos específicos para o PDF para garantir uma única página */
+        .pdf-export-mode .canvas-grid {
+            gap: 0.2rem;
+            min-height: auto;
+        }
+
+        .pdf-export-mode .canvas-section {
+            padding: 0.25rem;
+            min-height: 100px;
+        }
+        
+        .pdf-export-mode .canvas-section h3 {
+            font-size: 0.7rem;
+            margin-top: 0;
+            margin-bottom: 0.1rem;
+        }
+
+        .pdf-export-mode .canvas-content {
+            font-size: 0.5rem;
+        }
+
+        .pdf-export-mode .pdf-header h1 {
+            font-size: 1.2rem;
+        }
+
+        .pdf-export-mode .pdf-header span {
+            font-size: 0.7rem;
+        }
+
+
+        @media (max-width: 1024px) {
+            .canvas-grid {
+                grid-template-columns: 1fr 1fr;
+                grid-template-rows: auto;
+            }
+            .grid-partners { grid-area: auto; }
+            .grid-activities { grid-area: auto; }
+            .grid-value-propositions { grid-area: auto; }
+            .grid-customer-relationships { grid-area: auto; }
+            .grid-customer-segments { grid-area: auto; }
+            .grid-resources { grid-area: auto; }
+            .grid-channels { grid-area: auto; }
+            .grid-cost-structure { grid-area: auto; }
+            .grid-revenue-streams { grid-area: auto; }
+        }
+    </style>
+</head>
+<body class="bg-gray-100 p-8">
+    <div class="max-w-7xl mx-auto">
+        <h1 class="text-3xl font-bold text-center text-blue-800 mb-8">Canvas do Modelo de Negócios</h1>
+        <div class="lg:flex lg:space-x-8">
+            <!-- Coluna de Inputs -->
+            <div class="lg:w-1/3 p-6 bg-white rounded-xl shadow-md space-y-4 mb-8 lg:mb-0">
+                <h2 class="text-xl font-semibold text-blue-700">Preencha os campos</h2>
+                <div class="space-y-4">
+                    <label class="block">
+                        <span class="text-gray-700 font-medium">Nome do Projeto</span>
+                        <input id="project-name" type="text" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50" placeholder="Ex: Projeto Alpha">
+                    </label>
+                    <label class="block">
+                        <span class="text-gray-700 font-medium">Parcerias Principais</span>
+                        <textarea id="partners" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50" rows="3" placeholder="Quais são as parcerias necessárias para que seu produto possa ser desenvolvido e mantido."></textarea>
+                    </label>
+                    <label class="block">
+                        <span class="text-gray-700 font-medium">Atividades-Chave</span>
+                        <textarea id="activities" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50" rows="3" placeholder="Quais são as atividades essenciais para que seja possível entregar a Proposta de Valor."></textarea>
+                    </label>
+                    <label class="block">
+                        <span class="text-gray-700 font-medium">Recursos Principais</span>
+                        <textarea id="resources" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50" rows="3" placeholder="Quais são os recursos necessários para realizar as atividades-chave."></textarea>
+                    </label>
+                    <label class="block">
+                        <span class="text-gray-700 font-medium">Propostas de Valor</span>
+                        <textarea id="valueProps" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50" rows="3" placeholder="O que sua empresa vai oferecer para o mercado que realmente terá valor para os clientes. Pense naquilo que fará seus clientes procurar sua empresa e não o concorrente."></textarea>
+                    </label>
+                    <label class="block">
+                        <span class="text-gray-700 font-medium">Relacionamento com Clientes</span>
+                        <textarea id="customerRelationships" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50" rows="3" placeholder="Como a sua empresa se relacionará com cada segmento de cliente."></textarea>
+                    </label>
+                    <label class="block">
+                        <span class="text-gray-700 font-medium">Canais</span>
+                        <textarea id="channels" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50" rows="3" placeholder="Como o cliente compra e recebe seu produto e serviço."></textarea>
+                    </label>
+                    <label class="block">
+                        <span class="text-gray-700 font-medium">Segmentos de Clientes</span>
+                        <textarea id="customerSegments" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50" rows="3" placeholder="Quais segmentos de clientes serão foco da sua empresa."></textarea>
+                    </label>
+                    <label class="block">
+                        <span class="text-gray-700 font-medium">Estrutura de Custos</span>
+                        <textarea id="costStructure" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50" rows="3" placeholder="Quais os custos relevantes necessários para que a estrutura proposta possa funcionar."></textarea>
+                    </label>
+                    <label class="block">
+                        <span class="text-gray-700 font-medium">Fontes de Receita</span>
+                        <textarea id="revenueStreams" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50" rows="3" placeholder="Quais são as formas de obter receita por meio de propostas de valor."></textarea>
+                    </label>
+                </div>
+                <div class="flex space-x-4 mt-4">
+                    <button id="clearBtn" class="flex-1 bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-lg shadow-md transition-colors duration-200">
+                        Limpar
+                    </button>
+                    <button id="exportMarkdownBtn" class="flex-1 bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-lg shadow-md transition-colors duration-200">
+                        Exportar Markdown
+                    </button>
+                    <button id="generatePdfBtn" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg shadow-md transition-colors duration-200">
+                        Gerar PDF
+                    </button>
+                </div>
+                <div class="flex flex-col space-y-2 mt-4">
+                    <label for="importMarkdownInput" class="text-gray-700 font-medium">Carregar de Markdown:</label>
+                    <input type="file" id="importMarkdownInput" accept=".md" class="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
+                </div>
+            </div>
+            <!-- Canvas -->
+            <div id="canvas-container" class="lg:w-2/3 p-6 bg-white rounded-xl shadow-md">
+                <div class="pdf-header">
+                    <h1 id="pdf-project-name" class="text-xl font-bold text-blue-800">Canvas do Modelo de Negócios</h1>
+                    <span id="pdf-date" class="text-sm text-gray-600"></span>
+                </div>
+                <div class="canvas-grid">
+                    <div id="partners-canvas" class="canvas-section grid-partners">
+                        <h3>Parcerias Principais</h3>
+                        <div class="canvas-content"></div>
+                    </div>
+                    <div id="activities-canvas" class="canvas-section grid-activities">
+                        <h3>Atividades-Chave</h3>
+                        <div class="canvas-content"></div>
+                    </div>
+                    <div id="resources-canvas" class="canvas-section grid-resources">
+                        <h3>Recursos Principais</h3>
+                        <div class="canvas-content"></div>
+                    </div>
+                    <div id="value-props-canvas" class="canvas-section grid-value-propositions">
+                        <h3>Propostas de Valor</h3>
+                        <div class="canvas-content"></div>
+                    </div>
+                    <div id="customer-relationships-canvas" class="canvas-section grid-customer-relationships">
+                        <h3>Relacionamento com Clientes</h3>
+                        <div class="canvas-content"></div>
+                    </div>
+                    <div id="channels-canvas" class="canvas-section grid-channels">
+                        <h3>Canais</h3>
+                        <div class="canvas-content"></div>
+                    </div>
+                    <div id="customer-segments-canvas" class="canvas-section grid-customer-segments">
+                        <h3>Segmentos de Clientes</h3>
+                        <div class="canvas-content"></div>
+                    </div>
+                    <div id="cost-structure-canvas" class="canvas-section grid-cost-structure">
+                        <h3>Estrutura de Custos</h3>
+                        <div class="canvas-content"></div>
+                    </div>
+                    <div id="revenue-streams-canvas" class="canvas-section grid-revenue-streams">
+                        <h3>Fontes de Receita</h3>
+                        <div class="canvas-content"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        window.onload = function() {
+            const sections = [
+                'project-name', 'partners', 'activities', 'resources', 'valueProps', 'customerRelationships',
+                'channels', 'customerSegments', 'costStructure', 'revenueStreams'
+            ];
+            
+            const markdownSectionTitles = {
+                'project-name': 'Nome do Projeto',
+                'partners': 'Parcerias Principais',
+                'activities': 'Atividades-Chave',
+                'resources': 'Recursos Principais',
+                'valueProps': 'Propostas de Valor',
+                'customerRelationships': 'Relacionamento com Clientes',
+                'channels': 'Canais',
+                'customerSegments': 'Segmentos de Clientes',
+                'costStructure': 'Estrutura de Custos',
+                'revenueStreams': 'Fontes de Receita'
+            };
+
+            const canvasMap = {
+                'project-name': 'pdf-project-name',
+                'partners': 'partners-canvas',
+                'activities': 'activities-canvas',
+                'resources': 'resources-canvas',
+                'valueProps': 'value-props-canvas',
+                'customerRelationships': 'customer-relationships-canvas',
+                'channels': 'channels-canvas',
+                'customerSegments': 'customer-segments-canvas',
+                'costStructure': 'cost-structure-canvas',
+                'revenueStreams': 'revenue-streams-canvas',
+            };
+
+            const pdfProjectName = document.getElementById('pdf-project-name');
+            const pdfDate = document.getElementById('pdf-date');
+
+            function loadData() {
+                sections.forEach(section => {
+                    const savedData = localStorage.getItem(section);
+                    const inputElement = document.getElementById(section);
+                    if (savedData !== null && inputElement) {
+                        inputElement.value = savedData;
+                    }
+                });
+                updateCanvas();
+            }
+
+            function updateCanvas() {
+                sections.forEach(section => {
+                    const inputElement = document.getElementById(section);
+                    if (!inputElement) return;
+
+                    let canvasElement;
+                    if (section === 'project-name') {
+                        canvasElement = document.getElementById(canvasMap[section]);
+                        if (canvasElement) {
+                            canvasElement.textContent = inputElement.value || 'Canvas do Modelo de Negócios';
+                        }
+                    } else {
+                        canvasElement = document.getElementById(canvasMap[section])?.querySelector('.canvas-content');
+                        if (canvasElement) {
+                            canvasElement.textContent = inputElement.value;
+                        }
+                    }
+                });
+            }
+
+            if (pdfDate) {
+                const today = new Date();
+                const formattedDate = today.toLocaleDateString('pt-BR', {
+                    day: '2-digit',
+                    month: '2-digit',
+                    year: 'numeric'
+                });
+                pdfDate.textContent = `Data: ${formattedDate}`;
+            }
+
+            sections.forEach(section => {
+                const inputElement = document.getElementById(section);
+                if (inputElement) {
+                    inputElement.addEventListener('input', (event) => {
+                        localStorage.setItem(section, event.target.value);
+                        updateCanvas();
+                    });
+                }
+            });
+
+            const clearBtn = document.getElementById('clearBtn');
+            if (clearBtn) {
+                clearBtn.addEventListener('click', () => {
+                    localStorage.clear();
+                    sections.forEach(section => {
+                        const inputElement = document.getElementById(section);
+                        if (inputElement) {
+                            inputElement.value = '';
+                        }
+                    });
+                    updateCanvas();
+                });
+            }
+
+            const exportMarkdownBtn = document.getElementById('exportMarkdownBtn');
+            if (exportMarkdownBtn) {
+                exportMarkdownBtn.addEventListener('click', () => {
+                    let markdownContent = `# Canvas do Modelo de Negócios\n\n`;
+                    sections.forEach(section => {
+                        const inputElement = document.getElementById(section);
+                        if (inputElement && inputElement.value) {
+                            markdownContent += `## ${markdownSectionTitles[section]}\n${inputElement.value}\n\n`;
+                        }
+                    });
+
+                    const blob = new Blob([markdownContent], { type: 'text/markdown' });
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = 'Canvas_do_Modelo_de_Negocios.md';
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                    URL.revokeObjectURL(url);
+                });
+            }
+
+            const importMarkdownInput = document.getElementById('importMarkdownInput');
+            if (importMarkdownInput) {
+                importMarkdownInput.addEventListener('change', (event) => {
+                    const file = event.target.files[0];
+                    if (!file) return;
+
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        const content = e.target.result;
+                        const sectionsContent = {};
+                        const lines = content.split('\n');
+                        let currentSection = null;
+
+                        lines.forEach(line => {
+                            const trimmedLine = line.trim();
+                            if (trimmedLine.startsWith('## ')) {
+                                const title = trimmedLine.substring(3).trim();
+                                const sectionKey = Object.keys(markdownSectionTitles).find(key => markdownSectionTitles[key] === title);
+                                if (sectionKey) {
+                                    currentSection = sectionKey;
+                                    sectionsContent[currentSection] = '';
+                                } else {
+                                    currentSection = null;
+                                }
+                            } else if (currentSection) {
+                                sectionsContent[currentSection] += line + '\n';
+                            }
+                        });
+
+                        Object.keys(sectionsContent).forEach(sectionKey => {
+                            const inputElement = document.getElementById(sectionKey);
+                            if (inputElement) {
+                                inputElement.value = sectionsContent[sectionKey].trim();
+                                localStorage.setItem(sectionKey, inputElement.value);
+                            }
+                        });
+                        updateCanvas();
+                        importMarkdownInput.value = '';
+                    };
+                    reader.readAsText(file);
+                });
+            }
+
+            const generatePdfBtn = document.getElementById('generatePdfBtn');
+            const canvasContainer = document.getElementById('canvas-container');
+
+            if (generatePdfBtn && canvasContainer) {
+                generatePdfBtn.addEventListener('click', () => {
+                    generatePdfBtn.textContent = 'Gerando PDF...';
+                    generatePdfBtn.disabled = true;
+
+                    canvasContainer.classList.add('pdf-export-mode');
+
+                    html2canvas(canvasContainer, { scale: 2, scrollY: -window.scrollY }).then(canvas => {
+    const { jsPDF } = window.jspdf;
+    const pdf = new jsPDF('l', 'mm', 'a4');
+
+    const imgData = canvas.toDataURL('image/png');
+    const imgWidth = 297;
+    const pageHeight = 210; // altura da página A4 em mm (paisagem)
+    const imgHeight = (canvas.height * imgWidth) / canvas.width;
+    let heightLeft = imgHeight;
+    let position = 0;
+
+    pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+    heightLeft -= pageHeight;
+
+    while (heightLeft > 0) {
+        position = heightLeft - imgHeight;
+        pdf.addPage();
+        pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+        heightLeft -= pageHeight;
+    }
+
+    pdf.save('Canvas do Modelo de Negócios.pdf');
+
+    canvasContainer.classList.remove('pdf-export-mode');
+    generatePdfBtn.textContent = 'Gerar PDF';
+    generatePdfBtn.disabled = false;
+}).catch(error => {
+    console.error('Erro ao gerar PDF:', error);
+    canvasContainer.classList.remove('pdf-export-mode');
+    generatePdfBtn.textContent = 'Erro ao Gerar';
+    generatePdfBtn.disabled = false;
+});
+
+                });
+            }
+            
+            loadData();
+        };
+    </script>
+</body>
+</html>

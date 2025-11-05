@@ -1,0 +1,22 @@
+{
+  "compilerOptions": {
+    "target": "es6",
+    "module": "commonjs",
+    "outDir": "dist",
+    "rootDir": "src",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "emitDecoratorMetadata": true,
+    "useUnknownInCatchVariables": false,
+    "experimentalDecorators": true,
+    "typeRoots": ["./node_modules/@types", "./src/@types"],
+    "types": ["express"],
+    "baseUrl": "./src", // Define o diretório base para os caminhos
+    "paths": {
+      "@/*": ["*"]
+    }
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules"]
+}

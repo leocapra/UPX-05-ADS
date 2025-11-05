@@ -1,0 +1,38 @@
+{
+  "name": "borauni-back",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "Leonardo",
+  "license": "MIT",
+  "scripts": {
+    "dev": "nodemon --watch src --exec ts-node -r tsconfig-paths/register src/index.ts",
+    "dev:docker:up": "docker-compose up -d",
+    "typeorm": "npx typeorm-ts-node-commonjs",
+    "build": "tsc",
+    "migration:run": "npm run typeorm migration:run -- --dataSource src/data-source.ts",
+    "migration:revert": "npm run typeorm migration:revert -- --dataSource src/data-source.ts",
+    "migration:create": "node scripts/migration-create.js"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.17",
+    "@types/express": "^5.0.1",
+    "@types/express-serve-static-core": "^5.0.6",
+    "@types/jsonwebtoken": "^9.0.9",
+    "nodemon": "^3.1.10",
+    "ts-node": "^10.9.2",
+    "tsconfig-paths": "^4.2.0",
+    "typescript": "^5.8.3"
+  },
+  "dependencies": {
+    "bcryptjs": "^3.0.2",
+    "cors": "^2.8.5",
+    "dotenv": "^16.5.0",
+    "express": "^5.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "pg": "^8.15.6",
+    "reflect-metadata": "^0.2.2",
+    "socket.io": "^4.8.1",
+    "tsyringe": "^4.10.0",
+    "typeorm": "^0.3.22"
+  }
+}
