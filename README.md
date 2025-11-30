@@ -1,70 +1,85 @@
-# UPX-05 ADS – Sistema de Localização e Orientação de Descarte de Resíduos  
+# UPX-05 ADS -- Sistema de Localização e Orientação de Descarte de Resíduos
 
-## 🎯 Descrição da Ideia  
-O projeto consiste no desenvolvimento de um **site/aplicativo** que auxilia os usuários a **localizar pontos de coleta seletiva** e **receber orientações sobre o descarte correto de resíduos**.  
-Nosso objetivo é **promover a conscientização ambiental** e **facilitar o acesso a informações sobre reciclagem e sustentabilidade** dentro das cidades.  
+## 🎯 Descrição da Ideia
 
----
+O projeto consiste no desenvolvimento de um **site/aplicativo** que
+auxilia os usuários a **localizar pontos de coleta seletiva**,
+**entender como descartar corretamente cada tipo de resíduo** e
+**estimular práticas sustentáveis por meio de gamificação**. Além disso,
+o sistema também busca **aproximar empresas que utilizam materiais
+recicláveis** de usuários que realizam o descarte, promovendo uma
+**relação colaborativa** entre população e setor produtivo.
 
-## ⚙️ Funcionalidades Principais  
-- Cadastro e login de usuários.  
-- Mapa interativo com pontos de coleta.  
-- Busca por tipo de resíduo (plástico, vidro, metal, eletrônico, óleo de cozinha, etc.).  
-- Orientações e instruções sobre o descarte adequado de cada resíduo.  
-- Gamificação: recompensas virtuais por check-ins nos pontos de coleta.  
-- Ranking de usuários, permitindo comparar desempenho com amigos.  
+O objetivo é **promover a conscientização ambiental**, facilitar o
+acesso a informações sobre reciclagem dentro das cidades e ainda **criar
+um ecossistema sustentável**, onde cidadãos e empresas possam se
+beneficiar de um consumo mais responsável, reduzindo custos e diminuindo
+impactos ambientais.
 
----
+## ⚙️ Funcionalidades Principais
 
-## 🌱 ODS Atendidos  
-- **ODS 11**: Cidades e comunidades sustentáveis.  
-- **ODS 12**: Consumo e produção responsáveis.  
-- **ODS 13**: Ação contra a mudança global do clima.  
+-   Cadastro e login de usuários.
+-   Mapa interativo com pontos de coleta.
+-   Busca por tipo de resíduo (plástico, vidro, metal, eletrônico, óleo
+    de cozinha, etc.).
+-   Orientações e instruções sobre o descarte adequado de cada resíduo.
+-   Gamificação: recompensas virtuais por check-ins nos pontos de
+    coleta.
+-   Ranking de usuários, permitindo comparar desempenho com amigos.
+-   Possibilidade de empresas parceiras se conectarem ao app para
+    incentivar a reciclagem e divulgar pontos de reaproveitamento.
 
----
+## 🌱 ODS Atendidos
 
-## 👥 Público-Alvo  
-- Moradores de cidades que buscam informações sobre descarte adequado e coleta seletiva.  
+-   **ODS 11**: Cidades e comunidades sustentáveis.
+-   **ODS 12**: Consumo e produção responsáveis.
+-   **ODS 13**: Ação contra a mudança global do clima.
 
----
+## 👥 Público-Alvo
 
-## 📚 Disciplinas Relacionadas  
-Durante o desenvolvimento, aplicaremos os conhecimentos adquiridos nas disciplinas:  
-- **Banco de Dados**: Estruturação e gerenciamento das informações (usuários, pontos de coleta, tipos de resíduos).  
-- **Desenvolvimento Web**: Criação da interface e funcionalidades do site.  
-- **Desenvolvimento de Aplicativos Mobile**: Possível versão mobile para acesso rápido e uso de GPS.  
-- **Programação Orientada a Objetos**: Organização do código de forma modular e reutilizável.  
-- **Construção de Algoritmos e SQL**: Implementação das regras de negócio e consultas ao banco de dados.  
-- **Cibersegurança**: Proteção de dados pessoais e informações de geolocalização.  
-- **Inteligência Artificial (IA)**: Uso indireto de **engenharia de prompts** para otimizar o desenvolvimento e explorar automações auxiliares (não será utilizada IA de visão computacional).  
+-   Moradores de cidades que buscam informações sobre descarte adequado
+    e coleta seletiva.
+-   **Empresas que utilizam materiais recicláveis ou desejam reduzir
+    custos com matéria-prima**, tornando seus processos mais
+    sustentáveis.
 
----
+## 📚 Disciplinas Relacionadas
 
-## 🛠️ Tecnologias Sugeridas  
-- **Back-end**: Node.js (Express).  
-- **Banco de Dados**:  PostgreSQL.  
-- **Front-end Web**: React.js.  
-- **Mobile (opcional)**: React Native.  (estamos descutindo se vamos fazer ou não)
-- **Segurança**: JWT para autenticação segura, criptografia de dados sensíveis e crypt.
-- **Infra**: Docker (ambiente de desenvolvimento)
+-   Banco de Dados
+-   Desenvolvimento Web
+-   Desenvolvimento Mobile
+-   Programação Orientada a Objetos
+-   Construção de Algoritmos e SQL
+-   Cibersegurança
+-   Inteligência Artificial (engenharia de prompts)
 
----
+## 🛠️ Tecnologias Sugeridas
 
-## 🚀 Desenvolvimento  
-1. Definição da arquitetura do sistema.  
-2. Criação do banco de dados para usuários, resíduos e pontos de coleta.  
-3. Implementação do front-end web.  
-4. Integração com mapas para exibição de pontos de coleta.  
-5. Implementação do back-end com APIs.  
-6. Desenvolvimento da gamificação (check-ins/recompensas e ranking).  
-7. Ajustes para possível build mobile.  
+-   Back-end: Node.js (Express)
+-   Banco de Dados: PostgreSQL
+-   Front-end Web: React.js
+-   Mobile (opcional): React Native
+-   Segurança: JWT, criptografia e bcrypt
+-   Infra: Docker
 
----
+## 🚀 Desenvolvimento
 
-## 🧩 Observação Importante  
-O **objetivo principal do desenvolvimento** é aplicar conceitos de **UI/UX e psicologia** para **gamificar** o processo de descarte de lixo reciclável.  
-A ideia é tornar a experiência **mais divertida e motivadora**, incentivando os usuários não apenas a descartar corretamente, mas também a **interagir entre si** por meio de rankings e competições amigáveis com seus amigos.  
+1.  Definição da arquitetura.
+2.  Criação do banco de dados.
+3.  Implementação do front-end.
+4.  Integração com mapas.
+5.  Implementação do back-end.
+6.  Desenvolvimento da gamificação.
+7.  Ajustes para possível build mobile.
 
----
+## 🧩 Observação Importante
 
-📌 *Este projeto faz parte da disciplina UPX-05 (ADS) e tem como foco o trabalho em equipe, a aplicação prática das disciplinas cursadas e a entrega de uma solução funcional.*  
+O objetivo principal é aplicar conceitos de **UI/UX e psicologia** para
+tornar o descarte de resíduos **mais divertido, motivador e
+interativo**. Além disso, o sistema busca **incentivar, apoiar e motivar
+empresas** a se vincularem ao aplicativo, com o propósito de reduzir
+custos com matéria-prima, estimular práticas sustentáveis e colaborar
+com a preservação ambiental.
+
+📌 *Projeto da disciplina UPX-05 (ADS), com foco em trabalho em equipe e
+aplicação prática das disciplinas cursadas.*
