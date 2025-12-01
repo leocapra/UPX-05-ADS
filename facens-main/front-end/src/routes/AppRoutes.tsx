@@ -25,7 +25,7 @@ export default function AppRoutes() {
   <Route
     path="/homepage"
     element={
-      <PrivateRoute allowedCargos={[1]}>
+      <PrivateRoute allowedCargos={[1, 2]}>
         <HomePage />
       </PrivateRoute>
     }
@@ -36,7 +36,7 @@ export default function AppRoutes() {
   <Route
     path="/register-product-class"
     element={
-      <PrivateRoute allowedCargos={[1]}>
+      <PrivateRoute allowedCargos={[1, 2]}>
         <RegisterProductClass />
       </PrivateRoute>
     }
@@ -47,7 +47,7 @@ export default function AppRoutes() {
   <Route
     path="/register-products"
     element={
-      <PrivateRoute allowedCargos={[1]}>
+      <PrivateRoute allowedCargos={[1, 2]}>
         <RegisterProducts />
       </PrivateRoute>
     }
@@ -58,7 +58,7 @@ export default function AppRoutes() {
   <Route
     path="/register-categories"
     element={
-      <PrivateRoute allowedCargos={[1]}>
+      <PrivateRoute allowedCargos={[1, 2]}>
         <RegisterCategories />
       </PrivateRoute>
     }
